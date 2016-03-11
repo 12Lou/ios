@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <title>我是标题</title>
+        <script>
+            if(app){
+                var style = document.createElement('style')
+                style.innerHTML = "body{color:red;  }"
+                document.head.appendChild(style)
+            }
+            </script>
+    </head>
+    <body>
+        <h1>知识测试呢</h1>
+        <div id="test"></div>
+        <a href="http://www.baidu.com">百度</a>
+        <a href="http://www.163.com">网易</a>
+        <button>tips</button><input type="text"/>
+        <script>
+            var pubsub = {
+                cache: {},
+                sub: function(subname, func){
+                    this.cache[subname] = func
+                },
+                pub: function(subname, data){
+                    this.cache[subname](subname, data)
+                }
+            }
+        
+            pubsub.sub('appready', function(msg, data){ 
+                document.querySelector('#test').innerHTML = JSON.stringify(data)
+            })
+            pubsub.pub('appready',{name:"蛤蛤",title:app.name})
+            alert("你大爷啊")
+            
+            setTimeout(function(){
+                // wkwebview可接收从js发送的消息
+                       window.webkit.messageHandlers.foo.postMessage({title: document.title})
+            },5000)
+            
+            document.querySelector('button').addEventListener('click',function(){
+                window.webkit.messageHandlers.foo.postMessage({tips: true, title: document.querySelector('input').value })
+            })
+        </script>
+    </body>
+</html>
